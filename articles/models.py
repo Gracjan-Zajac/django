@@ -5,7 +5,7 @@ from django.utils.text import slugify
 # Create your models here.
 class Article(models.Model):
     title = models.CharField(max_length=150)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -17,9 +17,20 @@ class Article(models.Model):
     #     super().save(*args, **kwargs)
 
 
+def slugify_instance_title(instance, save=False):
+    slug = slugify(instance.title)
+    qs = Article.objects.filter(slug=slug).exclude(id=instance.id)
+    if qs.exists():
+        slug = f"{slug}-{instance.id}"
+    instance.slug = slug
+    if save:
+        instance.save()
+    return instance
+
+
 def article_pre_save(sender, instance, *args, **kwargs):
     if instance.slug is None:
-        instance.slug = slugify(instance.title)
+        slugify_instance_title(instance, save=False)
 
 
 pre_save.connect(article_pre_save, sender=Article)
@@ -27,8 +38,7 @@ pre_save.connect(article_pre_save, sender=Article)
 
 def article_post_save(sender, instance, created, *args, **kwargs):
     if created:
-        instance.slug = slugify(instance.title)
-        instance.save()
+        slugify_instance_title(instance, save=True)
 
 
 post_save.connect(article_post_save, sender=Article)
