@@ -8,7 +8,7 @@ from django.utils.text import slugify
 
 class ArticleTestCase(TestCase):
     def setUp(self):
-        self.number_of_articles = 5
+        self.number_of_articles = 50
         for _ in range(0, self.number_of_articles):
             Article.objects.create(title="Hello World", content="Some content")
 
@@ -34,3 +34,11 @@ class ArticleTestCase(TestCase):
         for obj in qs:
             slugified_title = slugify(obj.title)
             self.assertNotEqual(obj.slug, slugified_title)
+
+    def test_article_search_manager(self):
+        qs = Article.objects.search(query="Hello World")
+        self.assertEqual(qs.count(), self.number_of_articles)
+        qs = Article.objects.search(query="world")
+        self.assertEqual(qs.count(), self.number_of_articles)
+        qs = Article.objects.search(query="some content")
+        self.assertEqual(qs.count(), self.number_of_articles)

@@ -2,10 +2,12 @@
 
 {% block content %}
     <ol>
-    {% for object in objects_list %}
-        {% if object.title %}
-            <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
-        {% endif %}
-    {% endfor %}
+        {% for object in objects_list %}
+            {% if object.title %}
+                <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+            {% endif %}
+        {% empty %}
+            <h2>No results</h2>
+        {% endfor %}
     </ol>
 {% endblock content %}
