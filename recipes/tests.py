@@ -38,7 +38,7 @@ class RecipeTestCase(TestCase):
         self.recipe_ingrediend_b = RecipeIngredient.objects.create(
             recipe=self.recipe_a,
             name="Onion",
-            quantity="2",
+            quantity="xyz",
             unit="piecies",
         )
 
@@ -95,7 +95,7 @@ class RecipeTestCase(TestCase):
         )
         ingredient.full_clean()
 
-    def test_unit_measure_validation_erroe(self):
+    def test_unit_measure_validation_error(self):
         invalid_unit = "xyz"
         with self.assertRaises(ValidationError):
             ingredient = RecipeIngredient(
@@ -105,3 +105,7 @@ class RecipeTestCase(TestCase):
                 unit=invalid_unit,
             )
             ingredient.full_clean()
+
+    def test_quantity_to_float(self):
+        self.assertIsNotNone(self.recipe_ingrediend_a.quantity_as_float)
+        self.assertIsNone(self.recipe_ingrediend_b.quantity_as_float)
