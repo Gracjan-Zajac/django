@@ -1,4 +1,3 @@
-from black import assert_equivalent
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
