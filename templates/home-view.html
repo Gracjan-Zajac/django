@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p><a href="{% url 'article-create' %}">Create article</a></p>
+<p><a href="{% url 'articles:create' %}">Create article</a></p>
 <h2>Articles:</h2>
 <ul>
     {% for x in object_list %}
