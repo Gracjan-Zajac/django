@@ -29,7 +29,7 @@ def recipe_create_view(request):
         obj = form.save(commit=False)
         obj.user = request.user
         obj.save()
-        return redirect(obj.get_absolute.url())
+        return redirect(obj.get_absolute_url())
     return render(request, "recipes/create-update.html", context)
 
 

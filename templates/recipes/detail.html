@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ object.name }} {% if object.get_edit_url %}
+    <small><a href="{{ object.get_edit_url }}">Edit</a></small>{% endif %}</h1>
+<p>{{ object.description }}</p>
+<h2>Ingredients:</h2>
+<ul>
+    {% for i in object.get_ingredients_children %}
+        <li>{{ i.name }} - {{ i.quantity_as_float }} {{ i.unit }}</li>
+    {% endfor %}
+</ul>
+<p>{{ object.directions }}</p>
+{% endblock content %}
