@@ -18,7 +18,9 @@ def article_create_view(request):
     form = ArticleForm(request.POST or None)
     context = {"form": form}
     if form.is_valid():
-        article_obj = form.save()
+        article_obj = form.save(commit=False)
+        article_obj.user = request.user
+        article_obj.save()
         context["form"] = ArticleForm()
         return redirect(article_obj.get_absolute_url())
         # context["object"] = article_obj
